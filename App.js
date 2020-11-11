@@ -1,44 +1,69 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+//npm install @react-navigation/native
+//expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+//npm install @react-navigation/bottom-tabs
+
+import * as React from 'react';
+import { View, Text, Image } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
+
+import Menu from './Products/menu';
+import Activity from './Activity/activity';
+import Cart from './Products/cart';
 import styles from './src/styles';
-import { AppLoading } from "expo";
-import { useFonts, Mansalva_400Regular } from "@expo-google-fonts/mansalva";
+
+function Home() {
+    return ( 
+      <View> 
+        <Image style={styles.logo} source={require('./src/logo.png')} />
+        <View >{/* 店家資訊 */}
+          <Text>地址：</Text>
+          <Text>電話：</Text>
+          <Text>營業時間：</Text> 
+          <Text>介紹：</Text>
+        </View>
+
+      </View> 
+    );  
+}
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    Mansalva_400Regular,
-  });
-
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
     return (
-      <View style={styles.container}>
-        <View style={styles.cover}>
-          <Image
-            style={styles.logo}
-            source={require('./src/logo.png')}
-          />
-        </View>
-        <Text style={styles.title}>FJU Bakery</Text>
-        <View style={{width:'80%',flex:3, flexDirection: 'column', alignItems: 'stretch'}}>
-          <TouchableOpacity style={styles.box}>
-            <Text style={styles.text_btn} >預約手作</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.box}>
-            <Text style={styles.text_btn} >立即購買</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.box, {backgroundColor: '#fff'}]}>
-            <Text style={[
-              styles.text_btn, 
-              {color:'#262C49', textDecorationLine:'underline'}
-            ]} >我是店家</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex: 1.2}}/>
-        </View>
-        <StatusBar style="auto" />
-      </View>
-    );
-  }
+      <NavigationContainer >
+        <Tab.Navigator screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === '首頁') {
+              iconName = focused ? 'home' : 'home';
+              return <AntDesign name={iconName} size={size} color={color} />             
+            } else if (route.name === '菜單') {
+              iconName = focused ? 'bread-slice-outline' : 'bread-slice-outline';             
+              return <MaterialCommunityIcons name={iconName} size={size} color={color}/>;
+            }else if (route.name === '活動') {
+              iconName = focused ? 'ios-calendar' : 'ios-calendar';
+              return <Ionicons name={iconName} size={size} color={color} />;
+            }else {
+              iconName = focused ? 'shoppingcart' : 'shoppingcart';
+              return <AntDesign name={iconName} size={size} color={color} />;
+            }
+            // You can return any component that you like here!
+            // return <Icon name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: '#F2B653',
+          inactiveTintColor: 'gray',
+        }}>
+          <Tab.Screen name="首頁" component={Home} />
+          <Tab.Screen name="菜單" component={Menu} />
+          <Tab.Screen name="活動" component={Activity} />
+          <Tab.Screen name="購物車" component={Cart} />
+        </Tab.Navigator>
+      </NavigationContainer>
+  
+    ); 
 }
