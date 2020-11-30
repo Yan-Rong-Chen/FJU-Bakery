@@ -6,6 +6,7 @@ import * as React from 'react';
 import { View, Text, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
 import Menu from './Products/menu';
@@ -15,7 +16,7 @@ import styles from './src/styles';
 
 function Home() {
     return ( 
-      <View> 
+      <View style={styles.container}>
         <Image style={styles.logo} source={require('./src/logo.png')} />
         <View >{/* 店家資訊 */}
           <Text>地址：</Text>
@@ -29,10 +30,21 @@ function Home() {
 }
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
+  return (
+    <NavigationContainer >
+      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
+        <Stack.Screen name="Index" component={Index} />
+        {/* <Stack.Screen name="Detail" component={detailStack} /> */}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function Index() {
     return (
-      <NavigationContainer >
         <Tab.Navigator screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -63,7 +75,6 @@ export default function App() {
           <Tab.Screen name="活動" component={Activity} />
           <Tab.Screen name="購物車" component={Cart} />
         </Tab.Navigator>
-      </NavigationContainer>
   
     ); 
 }
