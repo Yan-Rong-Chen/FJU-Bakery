@@ -1,12 +1,14 @@
 //npm install @react-navigation/native
 //expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
 //npm install @react-navigation/bottom-tabs
+//npm install @react-navigation/drawer
 
 import * as React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
 import Menu from './Products/menu';
@@ -14,7 +16,7 @@ import Activity from './Activity/activity';
 import Cart from './Products/cart';
 import styles from './src/styles';
 
-function Home() {
+function HomeView({navigation}) {
     return ( 
       <View style={styles.container}>
         <Image style={styles.logo} source={require('./src/logo.png')} />
@@ -24,28 +26,36 @@ function Home() {
           <Text>營業時間：</Text> 
           <Text>介紹：</Text>
         </View>
-
+        <Button title="open" onPress={() => navigation.openDrawer()}></Button>
       </View> 
     );  
 }
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-export default function App() {
+function homeDrawer() {
   return (
-    <NavigationContainer >
-      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
-        <Stack.Screen name="Index" component={Index} />
-        {/* <Stack.Screen name="Detail" component={detailStack} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+      <Drawer.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
+        <Drawer.Screen name="HomeView" component={HomeView} />
+        {/* <Drawer.Screen name="index" component={Index} /> */}
+      </Drawer.Navigator>
   );
 }
 
-function Index() {
+function Home() {
+  return (
+      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
+        <Stack.Screen name="homeDrawer" component={homeDrawer} />
+      </Stack.Navigator>
+  );
+}
+
+export default function App() {
     return (
-        <Tab.Navigator screenOptions={({ route }) => ({
+    <NavigationContainer >
+      <Tab.Navigator screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -74,7 +84,8 @@ function Index() {
           <Tab.Screen name="菜單" component={Menu} />
           <Tab.Screen name="活動" component={Activity} />
           <Tab.Screen name="購物車" component={Cart} />
-        </Tab.Navigator>
+      </Tab.Navigator>
+    </NavigationContainer>
   
     ); 
 }
