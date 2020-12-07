@@ -15,6 +15,7 @@ export default function Menu() {
       tabBarOptions={{
         activeTintColor: '#F2B653',
         inactiveTintColor: 'gray',
+        indicatorStyle: {backgroundColor: '#F2B653'},
         style: {  },
       }}
     >
