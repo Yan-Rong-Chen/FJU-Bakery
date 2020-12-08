@@ -14,6 +14,7 @@ import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
 import Menu from './Products/menu';
 import Activity from './Activity/activity';
+import ActDetails from './Activity/actdetails';
 import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
@@ -31,7 +32,7 @@ function Home() {
         <Text>介紹：</Text>
       </View>
     </View> 
-    );  
+  );  
 }
 
 const Tab = createBottomTabNavigator();
@@ -43,6 +44,15 @@ const Loginstack = () => {
     <Stack.Navigator  screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" component={Login}/>
       <Stack.Screen name="register" component={Register}/>     
+    </Stack.Navigator>
+  )
+}
+
+const ActStack = () => {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="act" component={Activity} options={{headerShown: false}}/>
+      <Stack.Screen name="details" component={ActDetails} options={({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_name })}/>     
     </Stack.Navigator>
   )
 }
@@ -89,7 +99,7 @@ const tab = () => {
     }}>
       <Tab.Screen name="首頁" component={Home} />
       <Tab.Screen name="菜單" component={Menu} />
-      <Tab.Screen name="活動" component={Activity} />
+      <Tab.Screen name="活動" component={ActStack} />
       <Tab.Screen name="購物車" component={Cart} />     
     </Tab.Navigator> 
   )
