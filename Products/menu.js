@@ -1,21 +1,28 @@
 // npm install @react-navigation/material-top-tabs react-native-tab-view
 // npm install @react-navigation/stack
+//expo install axios
 
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { View, Text, Image, TextInput, FlatList, TouchableOpacity } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 
 import styles from '../src/styles';
-import { setStatusBarBackgroundColor } from 'expo-status-bar';
+import productDetail from './productDetail';
+import {axios_config, url} from '../config';
+import {ProductContext} from './productContext';
 
-export default function Menu() {
+const TopTab = createMaterialTopTabNavigator();
+const MenuStack = createStackNavigator();
+
+function MenuTopTab() {
   return (
     <TopTab.Navigator
       tabBarOptions={{
         activeTintColor: '#F2B653',
         inactiveTintColor: 'gray',
-        style: {  },
+        indicatorStyle: {backgroundColor: '#F2B653'},
       }}
     >
       <TopTab.Screen name="全部" component={AllScreen} />
@@ -24,29 +31,35 @@ export default function Menu() {
   )
 }
 
-function detailStack() {
-  return(
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>CakeScreen</Text>
-    </View>
-  );
-}
+function AllScreen({ navigation }) {
+  const get_url = url + "Products?maxRecords=50&view=All";
+  const proContext = useContext(ProductContext);
+  
+  async function fetchProductsData () {
+    try {
+        const result = await axios.get(get_url, axios_config);
+        proContext.setProducts(result.data.records);
+    } catch(e) {
+        console.log("error: " + e);
+    }
+  }
 
-function AllScreen() {
-  const data =[
-    {name:"巧克力蛋糕", price:380},
-    {name:"戚風蛋糕", price:390},
-    {name:"蘋果派", price:290},
-  ]
-  const [products, setProducts] = useState(data);
+  useEffect(() => {
+      fetchProductsData();
+  },[]);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index}) => {
     return (
-        <TouchableOpacity /*onPress = {()=>setSelected(index)}*/ style={styles.items}>
-          <Image style={[styles.logo, {height: '100%', flex: 2,}]} source={require('../src/logo.png')} />
+        <TouchableOpacity 
+          onPress = {() => {
+            navigation.navigate('Detail'),
+            proContext.setSelectedProIndex(index)
+          }} 
+          style={styles.items}>
+          <Image style={styles.itemImage} source={{ uri: item.fields.pro_pic[0].url }} />
           <View style={styles.itemsText} >
-            <Text style={styles.itemTitle}>{item.name}</Text>
-            <Text style={styles.itemContent}>${item.price}/個</Text>
+            <Text style={styles.itemTitle}>{item.fields.pro_name}</Text>
+            <Text style={styles.itemContent}>${item.fields.pro_price}/個</Text>
           </View>
         </TouchableOpacity>
     )
@@ -55,9 +68,9 @@ function AllScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <FlatList 
-          data={products} 
+          data={proContext.products} 
           renderItem = {renderItem}
-          keyExtractor={item => item.name}
+          keyExtractor={(item, index) => ""+index}
       >
       </FlatList>
     </View>
@@ -72,24 +85,35 @@ function CakeScreen() {
   );
 }
 
-const TopTab = createMaterialTopTabNavigator();
-// const MenuStack = createStackNavigator();
+export default function Menu() {
+  const [products, setProducts] = useState([]);
+  const [selectedProdIndex, setSelectedProIndex] = useState([]);
 
-// function MenuStack() {
-//   // const [search, setSearch] = useState("");
+  return (
+    <ProductContext.Provider 
+      value={{
+        products: products, 
+        setProducts: setProducts,
+        selectedProdIndex: selectedProdIndex, 
+        setSelectedProIndex: setSelectedProIndex
+      }}>
+      <MenuStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
+        <MenuStack.Screen name="Home" component={MenuTopTab} />
+        <MenuStack.Screen name="Detail" component={productDetail} 
+          options={{
+            title: null ,
+            headerTransparent: true, 
+            headerLeftContainerStyle: {
+              backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+              marginLeft: 10, 
+              marginTop: 5,
+              borderRadius: 100
+            },
+            headerTintColor: '#F2B653'
+          }} 
+        />
+      </MenuStack.Navigator>
+    </ProductContext.Provider>
+  );
 
-//   return (
-//     // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}> 
-//     //     <TextInput style={styles.textInput} 
-//     //       placeholder="搜尋商品" 
-//     //       value={search} 
-//     //       onChangeText={text=>setSearch(text)}
-//     //     />
-//     <MenuStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
-//       <MenuStack.Screen name="Home" component={menuStack} />
-//       <MenuStack.Screen name="Detail" component={detailStack} />
-//     </MenuStack.Navigator>
-//     // </View> 
-//   );
-
-// }
+}

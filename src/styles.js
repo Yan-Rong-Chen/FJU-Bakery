@@ -62,6 +62,12 @@ const styles = StyleSheet.create({
         // marginHorizontal: 5,
         borderRadius: 5,
     },
+    itemImage: {
+        height: '100%',
+        flex: 2,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+    },
     itemsText: {
         flex: 3,
         marginHorizontal: 5,
@@ -74,7 +80,28 @@ const styles = StyleSheet.create({
     itemContent: {
         fontSize: 16,
         color: '#F2B653',
-    }
+    },
+    detailContainer: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    detailImage: {
+        width: '100%',
+        height: '60%'
+    },
+    detailText: {
+        marginHorizontal: 10,
+        marginVertical: 5,
+    },
+    detailPrice: {
+        fontSize: 16,
+        color: '#F2B653',
+        marginVertical: 10,
+    },
+    detailDesc: {
+        fontSize: 16,
+        color: '#000',
+    },
 });
 
 export default styles;
