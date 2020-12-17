@@ -82,26 +82,36 @@ const styles = StyleSheet.create({
         color: '#F2B653',
     },
     detailContainer: {
-        flex: 1,
-        flexDirection: 'column',
+        flexGrow: 1,
     },
     detailImage: {
         width: '100%',
-        height: '60%'
+        height: height * 0.45
     },
     detailText: {
-        marginHorizontal: 10,
+        marginHorizontal: 15,
         marginVertical: 5,
     },
     detailPrice: {
-        fontSize: 16,
+        fontSize: 18,
         color: '#F2B653',
-        marginVertical: 10,
+        marginVertical: 15,
     },
     detailDesc: {
         fontSize: 16,
-        color: '#000',
+        color: '#696969',
+        marginVertical: 1,
     },
+    btn: {
+        marginVertical: 10,
+        paddingVertical: 10,
+        borderRadius: 2,
+        width: (width - 40)/2,
+        alignItems: 'center'
+    },
+    btnText: {
+        color: '#fff',
+    }
 });
 
 export default styles;

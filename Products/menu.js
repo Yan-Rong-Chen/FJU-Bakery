@@ -3,7 +3,7 @@
 //expo install axios
 
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, Image, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, FlatList, TouchableOpacity, } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
@@ -97,8 +97,8 @@ export default function Menu() {
         selectedProdIndex: selectedProdIndex, 
         setSelectedProIndex: setSelectedProIndex
       }}>
-      <MenuStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F2B653' },title: 'FJU Bakery' }}>
-        <MenuStack.Screen name="Home" component={MenuTopTab} />
+      <MenuStack.Navigator>
+        <MenuStack.Screen name="Home" component={MenuTopTab} options={{headerShown:false}} />
         <MenuStack.Screen name="Detail" component={productDetail} 
           options={{
             title: null ,
