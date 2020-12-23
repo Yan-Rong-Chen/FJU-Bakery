@@ -11,9 +11,9 @@ export default function Activity({ navigation,route }) {
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const Item = ({ index, item, onPress}) => (
+  const Item = ({ index, item, onPress}) => (   
     <TouchableOpacity onPress={onPress} style={styles.items}>
-      <Image style={[styles.logo, {height: '100%', flex: 2,}]} source={require('../src/logo.png')} />
+      <Image style={ {height: '100%', flex: 2,}} source={{uri:item.fields.act_pic[0].url}} />
       <View style={styles.itemsText}>
         <Text style={styles.itemTitle}>{item.fields.act_name}</Text>
         <Text style={styles.itemContent}>日期：{item.fields.act_date}</Text>
@@ -26,11 +26,7 @@ export default function Activity({ navigation,route }) {
     return (
       <Item index={index} item={item} 
       onPress={() => navigation.navigate('details',
-      {act_name:activity[index].fields.act_name,
-      act_date:activity[index].fields.act_date,
-      act_limit:activity[index].fields.act_limit,
-      act_content:activity[index].fields.act_content,
-      act_price:activity[index].fields.act_price,
+      {act_data:activity[index],
       id:item.id, }
       )} />
     )
@@ -38,7 +34,7 @@ export default function Activity({ navigation,route }) {
 
   async function fetchData () {
     const result = await axios.get(get_url,axios_config);
-    //console.log(result);
+    console.log(result.data.records[0].fields.act_pic[0].url);
     setActivity(result.data.records);
     setLoading(false);
   }
