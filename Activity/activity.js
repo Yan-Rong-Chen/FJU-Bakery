@@ -13,10 +13,10 @@ export default function Activity({ navigation,route }) {
 
   const Item = ({ index, item, onPress}) => (   
     <TouchableOpacity onPress={onPress} style={styles.items}>
-      <Image style={ {height: '100%', flex: 2,}} source={{uri:item.fields.act_pic[0].url}} />
+      <Image style={styles.itemImage} source={{ uri: item.fields.act_pic[0].url }} />
       <View style={styles.itemsText}>
         <Text style={styles.itemTitle}>{item.fields.act_name}</Text>
-        <Text style={styles.itemContent}>日期：{item.fields.act_date}</Text>
+        <Text style={styles.itemContent}>{item.fields.act_date}</Text>
         <Text style={styles.itemContent}>價格：${item.fields.act_price}/人</Text>          
       </View>
     </TouchableOpacity>

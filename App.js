@@ -14,7 +14,7 @@ import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
 import Menu from './Products/menu';
 import Activity from './Activity/activity';
-import ActDetails from './Activity/actdetails';
+import ActDetails from './Activity/actDetails';
 import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
@@ -54,7 +54,17 @@ const ActStack = () => {
   return(
     <Stack.Navigator>
       <Stack.Screen name="act" component={Activity} options={{headerShown: false}}/>
-      <Stack.Screen name="details" component={ActDetails} options={({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_data.fields.act_name })}/>     
+      <Stack.Screen name="details" component={ActDetails} options={{
+        title: null ,
+        headerTransparent: true, 
+        headerLeftContainerStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+          marginLeft: 10, 
+          marginTop: 5,
+          borderRadius: 100
+        },
+        headerTintColor: '#F2B653'
+      }/*({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_data.fields.act_name })*/}/>     
     </Stack.Navigator>
   )
 }

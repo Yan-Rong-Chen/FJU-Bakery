@@ -62,6 +62,12 @@ const styles = StyleSheet.create({
         // marginHorizontal: 5,
         borderRadius: 5,
     },
+    itemImage: {
+        height: '100%',
+        flex: 2,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+    },
     itemsText: {
         flex: 3,
         marginHorizontal: 5,
@@ -74,6 +80,37 @@ const styles = StyleSheet.create({
     itemContent: {
         fontSize: 16,
         color: '#F2B653',
+    },
+    detailContainer: {
+        flexGrow: 1,
+    },
+    detailImage: {
+        width: '100%',
+        height: height * 0.45
+    },
+    detailText: {
+        marginHorizontal: 15,
+        marginVertical: 5,
+    },
+    detailPrice: {
+        fontSize: 18,
+        color: '#F2B653',
+        marginVertical: 15,
+    },
+    detailDesc: {
+        fontSize: 16,
+        color: '#696969',
+        marginVertical: 1,
+    },
+    btn: {
+        marginVertical: 10,
+        paddingVertical: 10,
+        borderRadius: 2,
+        width: (width - 40)/2,
+        alignItems: 'center'
+    },
+    btnText: {
+        color: '#fff',
     }
 });
 
