@@ -4,7 +4,7 @@
 //npm install @react-navigation/drawer
 //npm install @react-navigation/stack
 
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, Text, Image, Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,8 +19,10 @@ import ActDetails from './Activity/actDetails';
 import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
+import Logout from './logout';
 import Order from './Products/order';
 import styles from './src/styles';
+import {AuthContext} from './AuthContext';
 
 function Home() {
   return ( 
@@ -63,21 +65,30 @@ const ActStack = () => {
           borderRadius: 100
         },
         headerTintColor: '#F2B653'
-      }/*({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_name })*/}/>     
+      }/*({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_data.fields.act_name })*/}/>     
     </Stack.Navigator>
   )
 }
 
 const drawer = () => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [signInAcc, setAcc] = useState("");
   return(
+    <AuthContext.Provider value={{isSignedIn: isSignedIn, setStatus:setIsSignedIn, signInAcc:signInAcc, setAcc:setAcc}}>
     <Drawer.Navigator initialRouteName="Home" drawerContentOptions={{
       activeTintColor: '#F2B653',
       inactiveTintColor: 'gray',
     }}>
       <Drawer.Screen name="Home" component={tab} />
+      {!isSignedIn && signInAcc=="" &&
       <Drawer.Screen name="登入" component={Loginstack} />
+      }
+      {isSignedIn && signInAcc!="" &&
+      <Drawer.Screen name="登出" component={Logout}/>
+      }
       <Drawer.Screen name="我的訂單" component={Order} />
     </Drawer.Navigator>
+    </AuthContext.Provider>
   )
 }
 
