@@ -111,6 +111,46 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: '#fff',
+    },
+    cartPrice: {
+        flexDirection: 'row', 
+        marginVertical: 20,
+        alignItems: 'center',
+    },
+    cartPriceLeft: {
+        width: 30, 
+        height: 30, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#DCDCDC',
+        borderWidth: 1, 
+        borderRightWidth:0, 
+        borderTopLeftRadius: 2, 
+        borderBottomLeftRadius: 2,
+    },
+    cartTextInput: {
+        width:50, 
+        height: 30, 
+        color: '#F2B653',
+        borderWidth: 1,
+        borderColor: '#DCDCDC', 
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+    cartPriceRight: {
+        width: 30, 
+        height: 30, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#DCDCDC',
+        borderWidth: 1, 
+        borderLeftWidth:0, 
+        borderTopRightRadius: 2, 
+        borderBottomRightRadius: 2
+    },
+    cartPriceLeftRightText: {
+        color: '#696969', 
+        fontWeight: 'bold'
     }
 });
 

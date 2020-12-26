@@ -4,13 +4,14 @@
 //npm install @react-navigation/drawer
 //npm install @react-navigation/stack
 
-import * as React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Image, Button, TouchableOpacity } from 'react-native';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
+import {ProductContext} from './Products/productContext';
 
 import Menu from './Products/menu';
 import Activity from './Activity/activity';
@@ -108,16 +109,28 @@ const tab = () => {
       inactiveTintColor: 'gray',
     }}>
       <Tab.Screen name="首頁" component={Home} />
-      <Tab.Screen name="菜單" component={Menu} />
+      <Tab.Screen name="menu" component={Menu} options={{title:"菜單"}} />
       <Tab.Screen name="活動" component={ActStack} />
-      <Tab.Screen name="購物車" component={Cart} />     
+      <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />     
     </Tab.Navigator> 
   )
 }
 
 export default function App() {
-    return (      
+  const [products, setProducts] = useState([]);
+  const [selectedProdIndex, setSelectedProdIndex] = useState([]);
+  const [productFromWhere, setProductFromWhere] = useState([]);
+  return (      
       <NavigationContainer >
+        <ProductContext.Provider 
+      value={{
+        products: products, 
+        setProducts: setProducts,
+        selectedProdIndex: selectedProdIndex, 
+        setSelectedProdIndex: setSelectedProdIndex,
+        productFromWhere: productFromWhere,
+        setProductFromWhere: setProductFromWhere
+      }}>
         <Stack.Navigator screenOptions={({navigation}) => ({ headerStyle: { backgroundColor: '#F2B653'},
         headerTitleAlign: 'center', title: 'FJU Bakery',
         headerLeft: () => (
@@ -128,6 +141,7 @@ export default function App() {
         })}>
           <Stack.Screen name="Index" component={drawer} />
         </Stack.Navigator>
+        </ProductContext.Provider>
       </NavigationContainer>  
     ); 
 }

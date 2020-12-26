@@ -3,7 +3,7 @@
 //expo install axios
 
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, Image, TextInput, FlatList, TouchableOpacity, } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
@@ -39,6 +39,7 @@ function AllScreen({ navigation }) {
     try {
         const result = await axios.get(get_url, axios_config);
         proContext.setProducts(result.data.records);
+        // console.log("menu:"+proContext.products[0].fields.pro_name);
     } catch(e) {
         console.log("error: " + e);
     }
@@ -52,8 +53,11 @@ function AllScreen({ navigation }) {
     return (
         <TouchableOpacity 
           onPress = {() => {
-            navigation.navigate('Detail'),
-            proContext.setSelectedProIndex(index)
+            proContext.setSelectedProdIndex(index),
+            proContext.setProductFromWhere(0),
+            console.log("menu:"+proContext.products[0]),
+            console.log(proContext.selectedProdIndex),
+            navigation.navigate('Detail')
           }} 
           style={styles.items}>
           <Image style={styles.itemImage} source={{ uri: item.fields.pro_pic[0].url }} />
@@ -86,17 +90,7 @@ function CakeScreen() {
 }
 
 export default function Menu() {
-  const [products, setProducts] = useState([]);
-  const [selectedProdIndex, setSelectedProIndex] = useState([]);
-
   return (
-    <ProductContext.Provider 
-      value={{
-        products: products, 
-        setProducts: setProducts,
-        selectedProdIndex: selectedProdIndex, 
-        setSelectedProIndex: setSelectedProIndex
-      }}>
       <MenuStack.Navigator>
         <MenuStack.Screen name="Home" component={MenuTopTab} options={{headerShown:false}} />
         <MenuStack.Screen name="Detail" component={productDetail} 
@@ -113,7 +107,6 @@ export default function Menu() {
           }} 
         />
       </MenuStack.Navigator>
-    </ProductContext.Provider>
   );
 
 }

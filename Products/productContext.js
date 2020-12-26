@@ -4,5 +4,7 @@ export const ProductContext = React.createContext({
     products: {},
     setProducts: () => {},
     selectedProdIndex: {},
-    setSelectedProIndex: () => {}
+    setSelectedProdIndex: () => {},
+    productFromWhere: {},
+    setProductFromWhere: () => {}
 })
