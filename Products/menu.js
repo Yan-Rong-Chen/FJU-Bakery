@@ -3,7 +3,7 @@
 //expo install axios
 
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
@@ -34,11 +34,13 @@ function MenuTopTab() {
 function AllScreen({ navigation }) {
   const get_url = url + "Products?maxRecords=50&view=All";
   const proContext = useContext(ProductContext);
+  const [loading, setLoading] = useState(true);
   
   async function fetchProductsData () {
     try {
         const result = await axios.get(get_url, axios_config);
         proContext.setProducts(result.data.records);
+        setLoading(false);
         // console.log("menu:"+proContext.products[0].fields.pro_name);
     } catch(e) {
         console.log("error: " + e);
@@ -71,12 +73,19 @@ function AllScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <FlatList 
-          data={proContext.products} 
-          renderItem = {renderItem}
-          keyExtractor={(item, index) => ""+index}
-      >
-      </FlatList>
+      {loading &&
+        <ActivityIndicator color="#F2B653" size="large" animating={loading} />
+      }
+      {!loading &&
+        <FlatList 
+            data={proContext.products} 
+            renderItem = {renderItem}
+            keyExtractor={(item, index) => ""+index}
+            onRefresh={()=>{fetchProductsData()}} //pull to refresh --function
+            refreshing={loading} //pull to refresh --boolean
+        >
+        </FlatList>
+      }
     </View>
   );
 }

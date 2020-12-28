@@ -1,24 +1,24 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Alert, ToastAndroid, ActivityIndicator } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
 
 import styles from '../src/styles';
 import {axios_config, url} from '../config';
 import {ProductContext} from './productContext';
+import PlaceOrder from './placeOrder';
 
 export default function Cart({navigation}) {
   const [loading, setLoading] = useState(true);
   const [isDataChanged, setIsDataChanged] = useState(false);
-  const [orderData, setOrderData] = useState([]);
-  // const [products3, setProducts3] = useState([]); //用於context
-  // const [selectedProdIndex3, setSelectedProdIndex3] = useState([]); //用於context
+  const [cartData, setCartData] = useState([]);
   const [numOfProd, setNumOfProd] = useState(null);
   const get_url = url + "Order?view=選購中";
   const proContext = useContext(ProductContext);
 
   // 改變商品數量
-  async function updateOrder(num, id) {
+  async function updateCart(num, id) {
     console.log("update");
     const update_url = url + "Order/" + id;
     num = parseInt(num);
@@ -35,7 +35,7 @@ export default function Cart({navigation}) {
     }
   }
 
-  async function deleteOrder(id) {
+  async function deleteCart(id) {
     const delete_url = url + "Order/" + id;
     const result = await axios.delete(delete_url, axios_config);
     if( result.data.deleted ) {
@@ -52,17 +52,17 @@ export default function Cart({navigation}) {
       "你確定要移除嗎", //message
       //button
       [ { text: "否", onPress: () => setNumOfProd(numOfProd) }, 
-        { text: "確定", onPress: () => deleteOrder(id) }
+        { text: "確定", onPress: () => deleteCart(id) }
       ]
     );
   }
 
-  async function fetchOrderData () {
+  async function fetchCartData () {
     try {
         const result = await axios.get(get_url, axios_config);
-        setOrderData(result.data.records);
+        setCartData(result.data.records);
         setLoading(false);
-      // console.log("fetchOrderData: " + orderData[0].fields.ord_number);
+      // console.log("fetchCartData: " + cartData[0].fields.ord_number);
       proContext.setProducts(result.data.records);
     } catch(e) {
         console.log("error: " + e);
@@ -74,7 +74,7 @@ export default function Cart({navigation}) {
     let numreg = /^[+-]?\d+$/; //整數
     if (numreg.test(num) && parseInt(num) >= 0) {
       console.log("1numOfProd: ", num);
-      updateOrder(num, id);
+      updateCart(num, id);
     } else {
       console.log("2numOfProd: ", numOfProd);
       ToastAndroid.show("請輸入正整數", ToastAndroid.LONG);
@@ -82,8 +82,8 @@ export default function Cart({navigation}) {
   }
 
   useEffect(() => {
-    fetchOrderData();
-  },[isDataChanged, numOfProd]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchOrderData()
+    fetchCartData();
+  },[isDataChanged, numOfProd]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchCartData()
 
   const renderItem = ({ item, index}) => {
     return (
@@ -110,7 +110,7 @@ export default function Cart({navigation}) {
             <Text style={styles.itemContent}>${item.fields.pro_price[0]} × </Text>
             <TouchableOpacity 
               style={styles.cartPriceLeft}
-              onPress={() => {updateOrder(item.fields.ord_number-1, item.id)}}
+              onPress={() => {updateCart(item.fields.ord_number-1, item.id)}}
             >
               <Text style={styles.cartPriceLeftRightText}>–</Text>
             </TouchableOpacity>
@@ -124,7 +124,7 @@ export default function Cart({navigation}) {
             />
             <TouchableOpacity 
               style={styles.cartPriceRight}
-              onPress={() => {updateOrder(item.fields.ord_number+1, item.id)}}
+              onPress={() => {updateCart(item.fields.ord_number+1, item.id)}}
             >
               <Text style={styles.cartPriceLeftRightText}>＋</Text>
             </TouchableOpacity>
@@ -140,28 +140,45 @@ export default function Cart({navigation}) {
     )
   };
 
-  return (
-    // <ProductContext3.Provider 
-    //   value={{
-    //     products3: products3, 
-    //     setProducts3: setProducts3,
-    //     selectedProdIndex3: selectedProdIndex3, 
-    //     setSelectedProdIndex3: setSelectedProdIndex3
-    //   }}>
+  function CartHome() {
+    return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         {loading &&
         <ActivityIndicator color="#F2B653" size="large" animating={loading} />
         }
         {!loading &&
           <FlatList 
-              data={orderData} 
+              data={cartData} 
               renderItem = {renderItem}
               keyExtractor={(item, index) => ""+index}
+              onRefresh={()=>{setIsDataChanged(!isDataChanged)}} //pull to refresh --function
+              refreshing={loading} //pull to refresh --boolean
           >
           </FlatList>
         }
       </View>
-    // </ProductContext3.Provider>
+    );
+  }
+
+  const CartStack = createStackNavigator();
+
+  return (
+    <CartStack.Navigator>
+      <CartStack.Screen name="CartHome" component={CartHome} options={{headerShown:false}} />
+      <CartStack.Screen name="PlaceOrder" component={PlaceOrder} 
+        options={{
+          title: null ,
+          headerTransparent: true, 
+          headerLeftContainerStyle: {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+            marginLeft: 10, 
+            marginTop: 5,
+            borderRadius: 100
+          },
+          headerTintColor: '#F2B653'
+        }} 
+      />
+    </CartStack.Navigator>
   );
 
 }
