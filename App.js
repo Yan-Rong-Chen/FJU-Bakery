@@ -100,7 +100,7 @@ const tab = () => {
         if (route.name === '首頁') {
           iconName = focused ? 'home' : 'home';
           return <AntDesign name={iconName} size={size} color={color} />             
-        } else if (route.name === '菜單') {
+        } else if (route.name === 'menu') {
           iconName = focused ? 'bread-slice-outline' : 'bread-slice-outline';             
           return <MaterialCommunityIcons name={iconName} size={size} color={color}/>;
         }else if (route.name === '活動') {

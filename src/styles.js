@@ -1,4 +1,5 @@
 import {StatusBar, StyleSheet, Dimensions} from 'react-native';
+import { color } from 'react-native-reanimated';
 
 var width = Dimensions.get('window').width; //full screen  width
 var height = Dimensions.get('window').height; //full screen height
@@ -151,6 +152,31 @@ const styles = StyleSheet.create({
     cartPriceLeftRightText: {
         color: '#696969', 
         fontWeight: 'bold'
+    },
+    placeOrder: {
+        marginHorizontal: 5,
+        flexDirection: 'row', 
+        alignItems: 'center',
+        backgroundColor: '#FFF'
+    },
+    placeOrderBtn: {
+        flex: 2,
+        // position: 'absolute',
+        height: height * 0.05, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 5,
+        marginHorizontal: 5,
+        backgroundColor: '#FFF',
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#F2B653'
+    },
+    cartTotal: {
+        flex:3,
+        textAlign: 'right',
+        marginHorizontal: 5,
+        color: '#F2B653',
     }
 });
 

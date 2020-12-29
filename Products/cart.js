@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Alert, ToastAndroid, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput, Alert, ToastAndroid, ActivityIndicator, Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
@@ -14,6 +14,8 @@ export default function Cart({navigation}) {
   const [isDataChanged, setIsDataChanged] = useState(false);
   const [cartData, setCartData] = useState([]);
   const [numOfProd, setNumOfProd] = useState(null);
+  let total = 0;
+  const [cartTot, setCartTot] = useState(total);
   const get_url = url + "Order?view=選購中";
   const proContext = useContext(ProductContext);
 
@@ -62,6 +64,7 @@ export default function Cart({navigation}) {
         const result = await axios.get(get_url, axios_config);
         setCartData(result.data.records);
         setLoading(false);
+        setCartTot(total);
       // console.log("fetchCartData: " + cartData[0].fields.ord_number);
       proContext.setProducts(result.data.records);
     } catch(e) {
@@ -86,6 +89,8 @@ export default function Cart({navigation}) {
   },[isDataChanged, numOfProd]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchCartData()
 
   const renderItem = ({ item, index}) => {
+    total += item.fields.ord_total;
+    setCartTot(total);
     return (
       <View style={styles.items}>
         {/* only set onPress function to image  */}
@@ -156,6 +161,15 @@ export default function Cart({navigation}) {
           >
           </FlatList>
         }
+        <View style={styles.placeOrder}>
+          <Text style={styles.cartTotal} >小結：${cartTot}</Text>
+          <TouchableOpacity 
+              style={styles.placeOrderBtn}
+              onPress={() => navigation.navigate('PlaceOrder')}
+          >
+              <Text style={{color: '#696969'}} >去結帳</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
