@@ -39,12 +39,12 @@ export default function MyActivity({ navigation,route }) {
     console.log(result);
     setActivity(result.data.records);
     setLoading(false);
-    authContext.setIsEnroll(false);
+    authContext.setChEnroll(false);
   }
 
   useEffect(() => {
     fetchData();
-  },[authContext.isEnroll]);
+  },[authContext.chEnroll]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

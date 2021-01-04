@@ -5,8 +5,8 @@ export const AuthContext = React.createContext({
     setStatus: ()=>{},
     signInAcc: "",
     setAcc: ()=>{},
-    IsEnroll: false,
-    setIsEnroll: ()=>{},
+    chEnroll: false,
+    setChEnroll: ()=>{},
 })
 
 //isSignedIn & setStatus will be replaced in App.js

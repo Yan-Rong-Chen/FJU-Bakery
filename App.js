@@ -19,6 +19,7 @@ import ActDetails from './Activity/actDetails';
 import EnrollAct from './Activity/enrollAct';
 import MyActivity from './Activity/myActivity';
 import MyActDetails from './Activity/myActDetails';
+import ModifyAct from "./Activity/modifyAct";
 import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
@@ -69,6 +70,16 @@ const MyAct = () => {
           borderRadius: 100
         },
         headerTintColor: '#F2B653'} } />
+      <Stack.Screen name="editAct" component={ModifyAct} options={{
+        title: null ,
+        headerTransparent: true, 
+        headerLeftContainerStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+          marginLeft: 10, 
+          marginTop: 5,
+          borderRadius: 100
+        },
+        headerTintColor: '#F2B653'} } />
     </Stack.Navigator>
   )
 }
@@ -106,9 +117,9 @@ const ActStack = () => {
 const drawer = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [signInAcc, setAcc] = useState("");
-  const [isEnroll, setIsEnroll] = useState(false);
+  const [chEnroll, setChEnroll] = useState(false);
   return(
-    <AuthContext.Provider value={{isSignedIn: isSignedIn, setStatus:setIsSignedIn, signInAcc:signInAcc, setAcc:setAcc, isEnroll:isEnroll, setIsEnroll:setIsEnroll}}>
+    <AuthContext.Provider value={{isSignedIn: isSignedIn, setStatus:setIsSignedIn, signInAcc:signInAcc, setAcc:setAcc, chEnroll:chEnroll, setChEnroll:setChEnroll}}>
     <Drawer.Navigator initialRouteName="Home" drawerContentOptions={{
       activeTintColor: '#F2B653',
       inactiveTintColor: 'gray',

@@ -10,10 +10,19 @@ export default function myActDetails({navigation,route}) {
   const authContext = useContext(AuthContext);
   var height = Dimensions.get('window').height;
 
-//   async function deleteData(id) {
-//     const delete = await axios.delete(url+"EnrollAct/"+id,axios_config);
-//     
-// }
+  async function deleteData(id) {
+    const del = await axios.delete(url+"EnrollAct/"+id,axios_config);
+    console.log("已刪除");
+    authContext.setChEnroll(true);
+    navigation.navigate("myAct")
+  }
+  
+  function delConfirm(id) {
+    var isDelete = confirm("確定要取消?");
+    if(isDelete){
+      deleteData(id);
+    }
+  }
   
   return (
     <View style={{flex: 1}} >
@@ -30,9 +39,13 @@ export default function myActDetails({navigation,route}) {
             <Text style={styles.detailDesc}>活動內容：{"\n"}{route.params.act_data.fields.act_content[0]}</Text>
             <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>           
             <TouchableOpacity style={[styles.btn, {backgroundColor: '#F2B653'}]} 
-              onPress={() => alert(route.params.id)}>
+              onPress={() => delConfirm(route.params.id)}>
                 <Text style={{color: '#fff',}}>取消報名</Text>
             </TouchableOpacity>           
+            <TouchableOpacity style={[styles.btn, {backgroundColor: '#262c49'}]} 
+              onPress={() => navigation.navigate("editAct",{act_data:route.params.act_data})}>
+                <Text style={{color: '#fff',}}>修改報名</Text>
+            </TouchableOpacity>
             </View>
         </View>
       </ScrollView>

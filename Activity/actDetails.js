@@ -21,7 +21,7 @@ export default function details({navigation,route}) {
     else{
       alert("您已報名");
     }
-}
+  }
   
   return (
     <View style={{flex: 1}} >

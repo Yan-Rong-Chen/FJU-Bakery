@@ -51,8 +51,8 @@ export default function register({ navigation }) {
 
     return(
         <View style={styles.container}>
-            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='email' value={email} onChangeText={text=>setEmail(text)}/>
-            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='password' value={password} secureTextEntry={true} onChangeText={text=>setPassword(text)}/>
+            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='email' keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={text=>setEmail(text)}/>
+            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='password' autoCapitalize="none" value={password} secureTextEntry={true} onChangeText={text=>setPassword(text)}/>
             <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='name' value={name} onChangeText={text=>setName(text)}/>
             <Text>{message}</Text>
             <TouchableOpacity style={[styles.btn, {backgroundColor: '#F2B653'}]} onPress={Register}>

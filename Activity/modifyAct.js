@@ -7,21 +7,23 @@ import styles from '../src/styles';
 import {axios_config, url} from '../config';
 import {AuthContext} from '../AuthContext';
 
-export default function enrollAct({navigation,route}) {
-    const get_url=url+"EnrollAct";
-    const [people, setPeople] = useState("");
-    const [period, setPeriod] = useState("9:00~12:00");   
+export default function modifyAct({navigation,route}) {
+    const get_url=url+"EnrollAct/"+route.params.act_data.id;
+    const [people, setPeople] = useState(route.params.act_data.fields.enr_people.toString());
+    const [period, setPeriod] = useState(route.params.act_data.fields.enr_actperiod);   
     const [message, setMessage] = useState("");
-    const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(route.params.act_data.fields.enr_price);
     const authContext = useContext(AuthContext);
-    const [checked, setChecked] = useState("");
+    var k=0;
+    if(route.params.act_data.fields.enr_actperiod=="14:00~17:00"){
+        k = 1;
+    }
+    const [checked, setChecked] = useState(k);
 
     const data = ["9:00~12:00", "14:00~17:00"];
-    async function Enroll() {
-        const EnrAct={
+    async function Modify() {
+        const EditAct={
             fields:{      
-              enr_cusemail: [authContext.signInAcc],
-              enr_actname: [route.params.act_name.id],
               enr_people: parseInt(people),
               enr_actperiod: period,             
             }      
@@ -31,15 +33,13 @@ export default function enrollAct({navigation,route}) {
                 setMessage("請輸入欄位");
             }
             else{
-                console.log(EnrAct);
-                const num = await axios.get(url+"Activity?filterByFormula=%7bact_name%7d%3d%22"+route.params.act_name.fields.act_name+"%22", axios_config);
-                console.log("已報名 "+num.data.records[0].fields.EnrollNumber);
+                const num = await axios.get(url+"Activity?filterByFormula=%7bact_name%7d%3d%22"+route.params.act_data.fields.act_name+"%22", axios_config);
                 if(num.data.records[0].fields.EnrollNumber+parseInt(people)<=num.data.records[0].fields.act_limit){
-                    const result = await axios.post(get_url, EnrAct, axios_config);
+                    const result = await axios.patch(get_url, EditAct, axios_config);
                     console.log(result);
                     authContext.setChEnroll(true);
-                    alert("報名成功");
-                    navigation.navigate("act",{change:false})
+                    alert("修改成功");
+                    navigation.navigate("myActDetails", {act_data:result.data, id:result.data.id})
                 }
                 else{
                     alert("超過報名人數");
@@ -54,14 +54,14 @@ export default function enrollAct({navigation,route}) {
     return (
         <View style={styles.container}  >
             <View style={styles.detailText} >
-            <Text>{route.params.act_name.fields.act_name}</Text>
-            <TextInput style={[styles.textInput,]} placeholder='人數' keyboardType="number-pad" value={people} onChangeText={text=> {setPeople(text); setTotal(route.params.act_name.fields.act_price*text)}}/>
-            <Text>{route.params.act_name.fields.act_date}</Text>
-            <Text>請選擇以下活動時段</Text>
+            <Text>{route.params.act_data.fields.act_name}</Text>
+            <TextInput style={[styles.textInput,]} placeholder='人數' keyboardType="number-pad" defaultValue={people} value={people} onChangeText={text=> {setPeople(text); setTotal(route.params.act_data.fields.act_price*text)}}/>
+            <Text>{route.params.act_data.fields.act_date}</Text>
+            <Text>請選擇以下活動時段</Text>        
             {data.map((data, key) => {
                 return (
                 <View key={data}>
-                {checked == key ? (
+                {checked == key ? (                  
                     <TouchableOpacity onPress={() => {setChecked(key);  setPeriod(data)}}style={{flexDirection: 'row', alignItems: 'center'}}>
                     <AntDesign name="check" size={20} color="black" />
                     <Text>{data}</Text>
@@ -81,8 +81,8 @@ export default function enrollAct({navigation,route}) {
             <Text>{message}</Text>
             <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableOpacity style={[styles.btn, {backgroundColor: '#F2B653'}]} 
-              onPress={Enroll}>
-                <Text style={{color: '#fff',}}>確定報名</Text>
+              onPress={Modify}>
+                <Text style={{color: '#fff',}}>確定修改</Text>
               </TouchableOpacity>
             </View>
             </View>
