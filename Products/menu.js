@@ -57,8 +57,8 @@ function AllScreen({ navigation }) {
           onPress = {() => {
             proContext.setSelectedProdIndex(index),
             proContext.setProductFromWhere(0),
-            console.log("menu:"+proContext.products[0]),
-            console.log(proContext.selectedProdIndex),
+            // console.log("menu:"+proContext.products[0]),
+            // console.log(proContext.selectedProdIndex),
             navigation.navigate('Detail')
           }} 
           style={styles.items}>

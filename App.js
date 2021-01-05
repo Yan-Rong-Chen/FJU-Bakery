@@ -36,9 +36,9 @@ function Home() {
       <View style={styles.detailText} >{/* 店家資訊 */}
         <Text style={styles.detailDesc}>地址：新北市新莊區中正路510號</Text>
         <Text style={styles.detailDesc}>電話：02-2716-0138</Text>
-        <Text style={styles.detailDesc}>營業時間：周一至周日 14:00~21:00</Text> 
-        <Text style={styles.detailDesc}>介紹：{"\n堅持日本進口的上選原料，確保完美和諧的幸福美味；\n執著費時費工的製作過程，帶來無與倫比的輕柔口感。\n蛋糕保存方式\n"+
-"「純戚風蛋糕」建議保存方式：取貨當日未食用完畢請放冷藏，能夠再放置冷藏兩天。\n「鮮奶油」類蛋糕建議保存方式：取貨後一個半小時內放回冷藏，能夠放置兩天。"}</Text>
+        <Text style={styles.detailDesc}>營業時間：周一至周日 9:00~21:00</Text> 
+        <Text style={styles.detailDesc}>介紹：{"\n◆ 堅持日本進口的上選原料，確保完美和諧的幸福美味；\n◆ 執著費時費工的製作過程，帶來無與倫比的輕柔口感。\n保存方式：\n◆ "+
+"「純戚風蛋糕」建議保存方式：取貨當日未食用完畢請放冷藏，能夠再放置冷藏兩天。\n◆ 「鮮奶油」類蛋糕建議保存方式：取貨後一個半小時內放回冷藏，能夠放置兩天。"}</Text>
       </View>
     </View> 
   );  

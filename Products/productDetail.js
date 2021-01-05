@@ -5,9 +5,11 @@ import axios from 'axios';
 import {axios_config, url} from '../config';
 import styles from '../src/styles';
 import {ProductContext} from './productContext';
+import {AuthContext} from '../AuthContext';
 
 export default function productDetail({navigation}) {
   const proContext = useContext(ProductContext);
+  const authContext = useContext(AuthContext);
   const selectedP = proContext.products[proContext.selectedProdIndex];
   let pro_name = selectedP.fields.pro_name, 
     pro_price = selectedP.fields.pro_price, 
@@ -25,38 +27,40 @@ export default function productDetail({navigation}) {
   async function addToCart(whichBtn) {
     console.log("addToCart");
 
-    if (selectedP.fields.Order || proContext.productFromWhere == 1) {
-      console.log("already addToCart");
-      if (whichBtn == 0) {
-        console.log("whichBtn: " + whichBtn);
-        ToastAndroid.show("已加入購物車", ToastAndroid.LONG);
-      } else {
-        console.log("whichBtn: " + whichBtn);
-        console.log("add to cart");
-      }
+    if (!authContext.signInAcc) {
+      ToastAndroid.show("請先登入", ToastAndroid.LONG);
     } else {
-      console.log("not yet addToCart");
-      const addToCart_url = url + "Order/";
-      const addRecord = {fields: {
-        "ord_cusemail": [ "recBWxZtuBRiO4Jey" ], //到時候改cus id
-        "ord_pname": [ selectedP.id ],
-        "ord_number": 1,
-        "ord_state": "選購中"
-      }};
-      try {
-        const result = await axios.post(addToCart_url, addRecord, axios_config);
+      if (selectedP.fields.Order || proContext.productFromWhere == 1) {
+        console.log("already addToCart");
         if (whichBtn == 0) {
           console.log("whichBtn: " + whichBtn);
-          ToastAndroid.show("已加入購物車 " + result.data.fields.pro_name, ToastAndroid.LONG);
+          ToastAndroid.show("已加入購物車", ToastAndroid.LONG);
+        } else {
+          console.log("whichBtn: " + whichBtn);
+          console.log("add to cart");
         }
+      } else {
+        console.log("not yet addToCart");
+        const addToCart_url = url + "Order/";
+        const addRecord = {fields: {
+          "ord_cusemail": [ "recBWxZtuBRiO4Jey" ], //到時候改cus id
+          "ord_pname": [ selectedP.id ],
+          "ord_number": 1,
+          "ord_state": "選購中"
+        }};
+        try {
+          const result = await axios.post(addToCart_url, addRecord, axios_config);
+          if (whichBtn == 0) {
+            console.log("whichBtn: " + whichBtn);
+            ToastAndroid.show("已加入購物車 " + result.data.fields.pro_name, ToastAndroid.LONG);
+          }
+        }
+        catch (e) {
+          console.log("error:"+e);
+        }
+        
       }
-      catch (e) {
-        console.log("error:"+e);
-      }
-      
     }
-    
-    
   }
   
   return (

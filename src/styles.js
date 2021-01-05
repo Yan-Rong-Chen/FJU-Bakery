@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logo: {//color:#F2B653
-        width: 200,
-        height: 150,
+        width: 150,
+        height: 112,
         resizeMode: 'stretch',
         borderWidth: 2,
         borderColor: '#F2B653',

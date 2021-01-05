@@ -99,9 +99,9 @@ export default function Cart({navigation}) {
           onPress = {() => {
             proContext.setSelectedProdIndex(index),
             proContext.setProductFromWhere(1),
-            console.log("cart:"+proContext.products[0]),
-            console.log(proContext.selectedProdIndex),
-            console.log(index),
+            // console.log("cart:"+proContext.products[0]),
+            // console.log(proContext.selectedProdIndex),
+            // console.log(index),
             navigation.navigate('menu',{screen: 'Detail'})
           }} 
           style={styles.itemImage} 
