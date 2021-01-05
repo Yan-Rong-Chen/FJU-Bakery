@@ -25,6 +25,7 @@ import Login from './login';
 import Register from './register';
 import Logout from './logout';
 import Order from './Products/order';
+import MySetting from "./mySetting";
 import styles from './src/styles';
 import {AuthContext} from './AuthContext';
 
@@ -130,6 +131,7 @@ const drawer = () => {
         <>       
         <Drawer.Screen name="我的活動" component={MyAct} />
         <Drawer.Screen name="我的訂單" component={Order} />
+        <Drawer.Screen name="我的設定" component={MySetting} />
         <Drawer.Screen name="登出" component={Logout}/>
         </>
         )
@@ -145,6 +147,7 @@ const drawer = () => {
 }
 
 const tab = () => {
+  const authContext = useContext(AuthContext);
   return(
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -173,8 +176,16 @@ const tab = () => {
     }}>
       <Tab.Screen name="首頁" component={Home} />
       <Tab.Screen name="menu" component={Menu} options={{title:"菜單"}} />
-      <Tab.Screen name="活動" component={ActStack} />
-      <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />     
+      <Tab.Screen name="活動" component={ActStack} />          
+      {authContext.signInAcc ? (
+        <>
+        <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />
+        </>
+      ) : (
+        <>
+        <Tab.Screen name="cart" component={Loginstack} options={{title:"購物車"}} />
+        </>
+      )}
     </Tab.Navigator> 
   )
 }

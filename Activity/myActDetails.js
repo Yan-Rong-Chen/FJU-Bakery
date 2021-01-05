@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, Alert, ToastAndroid} from 'react-native';
 import axios from 'axios';
 
 import styles from '../src/styles';
@@ -13,15 +13,20 @@ export default function myActDetails({navigation,route}) {
   async function deleteData(id) {
     const del = await axios.delete(url+"EnrollAct/"+id,axios_config);
     console.log("已刪除");
+    ToastAndroid.show("已刪除", ToastAndroid.LONG);
     authContext.setChEnroll(true);
     navigation.navigate("myAct")
   }
   
   function delConfirm(id) {
-    var isDelete = confirm("確定要取消?");
-    if(isDelete){
-      deleteData(id);
-    }
+    Alert.alert(
+      "", //title
+      "你確定要移除嗎", //message
+      //button
+      [ { text: "否" }, 
+        { text: "確定", onPress: () => deleteData(id) }
+      ]
+    );
   }
   
   return (

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, TextInput} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, TextInput, ToastAndroid} from 'react-native';
 import axios from 'axios';
 import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
@@ -38,11 +38,11 @@ export default function enrollAct({navigation,route}) {
                     const result = await axios.post(get_url, EnrAct, axios_config);
                     console.log(result);
                     authContext.setChEnroll(true);
-                    alert("報名成功");
+                    ToastAndroid.show("報名成功", ToastAndroid.LONG);
                     navigation.navigate("act",{change:false})
                 }
                 else{
-                    alert("超過報名人數");
+                    ToastAndroid.show("超過報名人數", ToastAndroid.LONG);
                 }               
             }
         }     

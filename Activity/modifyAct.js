@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, TextInput} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, TextInput, ToastAndroid} from 'react-native';
 import axios from 'axios';
 import {Ionicons, MaterialCommunityIcons, AntDesign} from '@expo/vector-icons';
 
@@ -38,11 +38,11 @@ export default function modifyAct({navigation,route}) {
                     const result = await axios.patch(get_url, EditAct, axios_config);
                     console.log(result);
                     authContext.setChEnroll(true);
-                    alert("修改成功");
+                    ToastAndroid.show("修改成功", ToastAndroid.LONG);
                     navigation.navigate("myActDetails", {act_data:result.data, id:result.data.id})
                 }
                 else{
-                    alert("超過報名人數");
+                    ToastAndroid.show("超過報名人數", ToastAndroid.LONG);
                 }               
             }
         }     

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions} from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Dimensions, ToastAndroid} from 'react-native';
 import axios from 'axios';
 
 import styles from '../src/styles';
@@ -11,16 +11,21 @@ export default function details({navigation,route}) {
   var height = Dimensions.get('window').height;
 
   async function fetchData() {
-    const exist = await axios.get(url+"EnrollAct?filterByFormula=AND(%7bacc_id%7d%3d%22"+authContext.signInAcc+"%22%2c%7bact_name%7d%3d%22"+route.params.act_data.fields.act_name+"%22)",axios_config);//filterByFormula=AND({acc_id}="authContext.signInAcc", {act_name}="route.params.act_data.fields.act_name")
-    console.log(exist);
-    if(exist.data.records.length==0){
-      navigation.navigate('enroll',
-        {act_name:route.params.act_data}
-      )
+    if(authContext.isSignedIn){
+      const exist = await axios.get(url+"EnrollAct?filterByFormula=AND(%7bacc_id%7d%3d%22"+authContext.signInAcc+"%22%2c%7bact_name%7d%3d%22"+route.params.act_data.fields.act_name+"%22)",axios_config);//filterByFormula=AND({acc_id}="authContext.signInAcc", {act_name}="route.params.act_data.fields.act_name")
+      console.log(exist);
+      if(exist.data.records.length==0){
+        navigation.navigate('enroll',
+          {act_name:route.params.act_data}
+        )
+      }
+      else{
+        ToastAndroid.show("您已報名", ToastAndroid.LONG);
+      }
+    }else{
+      navigation.navigate('登入')
     }
-    else{
-      alert("您已報名");
-    }
+    
   }
   
   return (
@@ -41,7 +46,7 @@ export default function details({navigation,route}) {
               route.params.act_data.fields.EnrollNumber<route.params.act_data.fields.act_limit?(
                 <>
                 <TouchableOpacity style={[styles.btn, {backgroundColor: '#F2B653'}]} 
-                  disabled={!authContext.isSignedIn} 
+                  // disabled={!authContext.isSignedIn} 
                   onPress={fetchData}>
                   <Text style={{color: '#fff',}}>立即報名</Text>
                 </TouchableOpacity>
