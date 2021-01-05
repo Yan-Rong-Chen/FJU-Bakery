@@ -36,7 +36,7 @@ export default function register({ navigation }) {
                 if(exist.data.records.length==0){
                     const result = await axios.post(get_url,newAccount, axios_config);
                     console.log(result);  
-                    authContext.setAcc(email);
+                    authContext.setAcc(result.data.records[0].id);
                     authContext.setStatus(true);
                 }
                 else{

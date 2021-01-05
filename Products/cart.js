@@ -61,10 +61,13 @@ export default function Cart({navigation}) {
 
   async function fetchCartData () {
     try {
-        const result = await axios.get(get_url, axios_config);
-        setCartData(result.data.records);
-        setLoading(false);
-        setCartTot(total);
+      const result = await axios.get(get_url, axios_config);
+      setCartData(result.data.records);
+      setLoading(false);
+      for (const i in result.data.records) { //setState會有時間差，不能用cartData，要用result.data.records
+        total += result.data.records[i].fields.ord_total;
+      }
+      setCartTot(total);
       // console.log("fetchCartData: " + cartData[0].fields.ord_number);
       proContext.setProducts(result.data.records);
     } catch(e) {
@@ -89,8 +92,6 @@ export default function Cart({navigation}) {
   },[isDataChanged, numOfProd]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchCartData()
 
   const renderItem = ({ item, index}) => {
-    total += item.fields.ord_total;
-    setCartTot(total);
     return (
       <View style={styles.items}>
         {/* only set onPress function to image  */}
@@ -165,7 +166,7 @@ export default function Cart({navigation}) {
           <Text style={styles.cartTotal} >小結：${cartTot}</Text>
           <TouchableOpacity 
               style={styles.placeOrderBtn}
-              onPress={() => navigation.navigate('PlaceOrder')}
+              onPress={() => navigation.navigate('PlaceOrder', {productTot: cartTot })}
           >
               <Text style={{color: '#696969'}} >去結帳</Text>
           </TouchableOpacity>

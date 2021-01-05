@@ -45,13 +45,6 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
     },
-    textInput: {
-        height: 40,
-        padding: 10,
-        borderColor: '#F2B653',
-        borderWidth: 2,
-        borderRadius: 2,
-    },
     items: {
         height: height * 0.2,
         width: width * 0.98,
@@ -154,6 +147,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     placeOrder: {
+        width: width - 10,
         marginHorizontal: 5,
         flexDirection: 'row', 
         alignItems: 'center',
@@ -177,7 +171,74 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         marginHorizontal: 5,
         color: '#F2B653',
-    }
+    },
+    formGroup: {
+        marginBottom: 5
+    },
+    formView: {
+        width: width,
+        height: 40,
+        padding: 10,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        backgroundColor: '#FFF'
+    },
+    formLabel: {
+        color: '#F2B653',
+    },
+    formValue: {
+        color: '#696969',
+    },
+    modalView: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        marginTop: 0
+    },
+    modal: {
+        width: width-2*20,
+        // height: 300,
+        margin: 20,
+        backgroundColor: "#FFF",
+        borderRadius: 2,
+        padding: 10,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+    },
+    modalBtnView: {
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        width:'100%', 
+        justifyContent: 'flex-end'
+    },
+    modalBtnText: {
+        padding: 10,
+        margin: 3,
+        color: '#F2B653',
+    },
+    textInput: {
+        width: '100%',
+        marginVertical: 20, 
+        height: 30, 
+        color: '#696969',
+        borderColor: '#F2B653',
+        borderWidth: 0,
+        borderBottomWidth: 2,
+        fontWeight: 'normal',
+    },
+    radioBtn: {
+        width: width - 60,
+        height: 40, 
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
 });
 
 export default styles;

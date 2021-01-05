@@ -24,7 +24,7 @@ export default function login({ navigation }) {
                     setMessage("帳號密碼錯誤");
                 }
                 else{
-                    authContext.setAcc(email);
+                    authContext.setAcc(result.data.records[0].id);
                     console.log("帳密對");                    
                     authContext.setStatus(true);
                 }
