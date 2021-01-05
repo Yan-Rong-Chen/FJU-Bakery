@@ -16,11 +16,16 @@ import {ProductContext} from './Products/productContext';
 import Menu from './Products/menu';
 import Activity from './Activity/activity';
 import ActDetails from './Activity/actDetails';
+import EnrollAct from './Activity/enrollAct';
+import MyActivity from './Activity/myActivity';
+import MyActDetails from './Activity/myActDetails';
+import ModifyAct from "./Activity/modifyAct";
 import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
 import Logout from './logout';
 import Order from './Products/order';
+import MySetting from "./mySetting";
 import styles from './src/styles';
 import {AuthContext} from './AuthContext';
 
@@ -28,11 +33,12 @@ function Home() {
   return ( 
     <View style={styles.container}> 
       <Image style={styles.logo} source={require('./src/logo.png')} />
-      <View >{/* 店家資訊 */}
-        <Text>地址：</Text>
-        <Text>電話：</Text>
-        <Text>營業時間：</Text> 
-        <Text>介紹：</Text>
+      <View style={styles.detailText} >{/* 店家資訊 */}
+        <Text style={styles.detailDesc}>地址：新北市新莊區中正路510號</Text>
+        <Text style={styles.detailDesc}>電話：02-2716-0138</Text>
+        <Text style={styles.detailDesc}>營業時間：周一至周日 14:00~21:00</Text> 
+        <Text style={styles.detailDesc}>介紹：{"\n堅持日本進口的上選原料，確保完美和諧的幸福美味；\n執著費時費工的製作過程，帶來無與倫比的輕柔口感。\n蛋糕保存方式\n"+
+"「純戚風蛋糕」建議保存方式：取貨當日未食用完畢請放冷藏，能夠再放置冷藏兩天。\n「鮮奶油」類蛋糕建議保存方式：取貨後一個半小時內放回冷藏，能夠放置兩天。"}</Text>
       </View>
     </View> 
   );  
@@ -44,9 +50,37 @@ const Drawer = createDrawerNavigator();
 
 const Loginstack = () => {
   return(
-    <Stack.Navigator  screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="login" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="login" component={Login}/>
       <Stack.Screen name="register" component={Register}/>     
+    </Stack.Navigator>
+  )
+}
+
+const MyAct = () => {
+  return(
+    <Stack.Navigator initialRouteName="myAct">
+      <Stack.Screen name="myAct" component={MyActivity} options={{headerShown: false}} />
+      <Stack.Screen name="myActDetails" component={MyActDetails} options={{
+        title: null ,
+        headerTransparent: true, 
+        headerLeftContainerStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+          marginLeft: 10, 
+          marginTop: 5,
+          borderRadius: 100
+        },
+        headerTintColor: '#F2B653'} } />
+      <Stack.Screen name="editAct" component={ModifyAct} options={{
+        title: null ,
+        headerTransparent: true, 
+        headerLeftContainerStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+          marginLeft: 10, 
+          marginTop: 5,
+          borderRadius: 100
+        },
+        headerTintColor: '#F2B653'} } />
     </Stack.Navigator>
   )
 }
@@ -54,7 +88,7 @@ const Loginstack = () => {
 const ActStack = () => {
   return(
     <Stack.Navigator>
-      <Stack.Screen name="act" component={Activity} options={{headerShown: false}}/>
+      <Stack.Screen name="act" component={Activity} initialParams={{ change: true }} options={{headerShown: false}}/>     
       <Stack.Screen name="details" component={ActDetails} options={{
         title: null ,
         headerTransparent: true, 
@@ -65,7 +99,18 @@ const ActStack = () => {
           borderRadius: 100
         },
         headerTintColor: '#F2B653'
-      }/*({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_data.fields.act_name })*/}/>     
+      }/*({ route }) => ({ headerTitleAlign: 'center', title: route.params.act_data.fields.act_name })*/}/>   
+      <Stack.Screen name="enroll" component={EnrollAct} options={{
+        title: null ,
+        headerTransparent: true, 
+        headerLeftContainerStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.3)', 
+          marginLeft: 10, 
+          marginTop: 5,
+          borderRadius: 100
+        },
+        headerTintColor: '#F2B653'
+      }} />  
     </Stack.Navigator>
   )
 }
@@ -73,26 +118,36 @@ const ActStack = () => {
 const drawer = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [signInAcc, setAcc] = useState("");
+  const [chEnroll, setChEnroll] = useState(false);
   return(
-    <AuthContext.Provider value={{isSignedIn: isSignedIn, setStatus:setIsSignedIn, signInAcc:signInAcc, setAcc:setAcc}}>
+    <AuthContext.Provider value={{isSignedIn: isSignedIn, setStatus:setIsSignedIn, signInAcc:signInAcc, setAcc:setAcc, chEnroll:chEnroll, setChEnroll:setChEnroll}}>
     <Drawer.Navigator initialRouteName="Home" drawerContentOptions={{
       activeTintColor: '#F2B653',
       inactiveTintColor: 'gray',
     }}>
       <Drawer.Screen name="Home" component={tab} />
-      {!isSignedIn && signInAcc=="" &&
-      <Drawer.Screen name="登入" component={Loginstack} />
+      {
+        signInAcc?(
+        <>       
+        <Drawer.Screen name="我的活動" component={MyAct} />
+        <Drawer.Screen name="我的訂單" component={Order} />
+        <Drawer.Screen name="我的設定" component={MySetting} />
+        <Drawer.Screen name="登出" component={Logout}/>
+        </>
+        )
+        :(
+        <>
+        <Drawer.Screen name="登入" component={Loginstack} />
+        </>
+        )
       }
-      {isSignedIn && signInAcc!="" &&
-      <Drawer.Screen name="登出" component={Logout}/>
-      }
-      <Drawer.Screen name="我的訂單" component={Order} />
     </Drawer.Navigator>
     </AuthContext.Provider>
   )
 }
 
 const tab = () => {
+  const authContext = useContext(AuthContext);
   return(
     <Tab.Navigator screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -121,8 +176,16 @@ const tab = () => {
     }}>
       <Tab.Screen name="首頁" component={Home} />
       <Tab.Screen name="menu" component={Menu} options={{title:"菜單"}} />
-      <Tab.Screen name="活動" component={ActStack} />
-      <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />     
+      <Tab.Screen name="活動" component={ActStack} />          
+      {authContext.signInAcc ? (
+        <>
+        <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />
+        </>
+      ) : (
+        <>
+        <Tab.Screen name="cart" component={Loginstack} options={{title:"購物車"}} />
+        </>
+      )}
     </Tab.Navigator> 
   )
 }

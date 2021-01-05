@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import { View, Text, Image, Button, TextInput } from 'react-native';
+import { View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
 import styles from './src/styles';
@@ -51,12 +51,16 @@ export default function register({ navigation }) {
 
     return(
         <View style={styles.container}>
-            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='email' value={email} onChangeText={text=>setEmail(text)}/>
-            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='password' value={password} secureTextEntry={true} onChangeText={text=>setPassword(text)}/>
+            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='email' keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={text=>setEmail(text)}/>
+            <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='password' autoCapitalize="none" value={password} secureTextEntry={true} onChangeText={text=>setPassword(text)}/>
             <TextInput style={[styles.textInput, {width:"70%"}]} placeholder='name' value={name} onChangeText={text=>setName(text)}/>
             <Text>{message}</Text>
-            <Button title="註冊" onPress={Register} />
-            <Text onPress={() => navigation.navigate('login')}>我要登入</Text>
+            <TouchableOpacity style={[styles.btn, {backgroundColor: '#F2B653'}]} onPress={Register}>
+              <Text style={{color: '#fff',}}>註冊</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.btn, {backgroundColor: '#262c49'}]} onPress={() => navigation.navigate('login')}>
+              <Text style={{color: '#fff',}}>我要登入</Text>
+            </TouchableOpacity>
         </View>
     );
 }
