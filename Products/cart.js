@@ -6,17 +6,18 @@ import { Feather } from '@expo/vector-icons';
 
 import styles from '../src/styles';
 import {axios_config, url} from '../config';
+import {AuthContext} from '../AuthContext';
 import {ProductContext} from './productContext';
 import PlaceOrder from './placeOrder';
 
 export default function Cart({navigation}) {
+  const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [isDataChanged, setIsDataChanged] = useState(false);
   const [cartData, setCartData] = useState([]);
   const [numOfProd, setNumOfProd] = useState(null);
   let total = 0;
   const [cartTot, setCartTot] = useState(total);
-  const get_url = url + "Order?view=選購中";
   const proContext = useContext(ProductContext);
 
   // 改變商品數量
@@ -60,6 +61,7 @@ export default function Cart({navigation}) {
   }
 
   async function fetchCartData () {
+    const get_url = url + "Order?view=選購中&filterByFormula=SEARCH(%22"+authContext.signInAcc+"%22%2C+acc_email)";
     try {
       const result = await axios.get(get_url, axios_config);
       setCartData(result.data.records);
@@ -162,15 +164,17 @@ export default function Cart({navigation}) {
           >
           </FlatList>
         }
+        {cartData.length!=0 &&
         <View style={styles.placeOrder}>
           <Text style={styles.cartTotal} >小結：${cartTot}</Text>
           <TouchableOpacity 
               style={styles.placeOrderBtn}
-              onPress={() => navigation.navigate('PlaceOrder', {productTot: cartTot })}
+              onPress={() => navigation.navigate('PlaceOrder', {productData: cartData, productTot: cartTot })}
           >
               <Text style={{color: '#696969'}} >去結帳</Text>
           </TouchableOpacity>
         </View>
+        }
       </View>
     );
   }

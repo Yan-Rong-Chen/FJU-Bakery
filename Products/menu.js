@@ -91,9 +91,60 @@ function AllScreen({ navigation }) {
 }
 
 function CakeScreen() {
-  return(
+  const get_url = url + "Products?maxRecords=50&view=Cake";
+  const proContext = useContext(ProductContext);
+  const [loading, setLoading] = useState(true);
+  
+  async function fetchProductsData () {
+    try {
+        const result = await axios.get(get_url, axios_config);
+        proContext.setProducts(result.data.records);
+        setLoading(false);
+        // console.log("menu:"+proContext.products[0].fields.pro_name);
+    } catch(e) {
+        console.log("error: " + e);
+    }
+  }
+
+  useEffect(() => {
+      fetchProductsData();
+  },[]);
+
+  const renderItem = ({ item, index}) => {
+    return (
+        <TouchableOpacity 
+          onPress = {() => {
+            proContext.setSelectedProdIndex(index),
+            proContext.setProductFromWhere(0),
+            // console.log("menu:"+proContext.products[0]),
+            // console.log(proContext.selectedProdIndex),
+            navigation.navigate('Detail')
+          }} 
+          style={styles.items}>
+          <Image style={styles.itemImage} source={{ uri: item.fields.pro_pic[0].url }} />
+          <View style={styles.itemsText} >
+            <Text style={styles.itemTitle}>{item.fields.pro_name}</Text>
+            <Text style={styles.itemContent}>${item.fields.pro_price}/個</Text>
+          </View>
+        </TouchableOpacity>
+    )
+  };
+
+  return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>CakeScreen</Text>
+      {loading &&
+        <ActivityIndicator color="#F2B653" size="large" animating={loading} />
+      }
+      {!loading &&
+        <FlatList 
+            data={proContext.products} 
+            renderItem = {renderItem}
+            keyExtractor={(item, index) => ""+index}
+            onRefresh={()=>{fetchProductsData()}} //pull to refresh --function
+            refreshing={loading} //pull to refresh --boolean
+        >
+        </FlatList>
+      }
     </View>
   );
 }

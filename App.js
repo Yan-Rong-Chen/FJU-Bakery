@@ -24,7 +24,7 @@ import Cart from './Products/cart';
 import Login from './login';
 import Register from './register';
 import Logout from './logout';
-import Order from './Products/order';
+import MyOrder from './Products/myOrder';
 import MySetting from "./mySetting";
 import styles from './src/styles';
 import {AuthContext} from './AuthContext';
@@ -130,7 +130,7 @@ const drawer = () => {
         signInAcc?(
         <>       
         <Drawer.Screen name="我的活動" component={MyAct} />
-        <Drawer.Screen name="我的訂單" component={Order} />
+        <Drawer.Screen name="我的訂單" component={MyOrder} />
         <Drawer.Screen name="我的設定" component={MySetting} />
         <Drawer.Screen name="登出" component={Logout}/>
         </>

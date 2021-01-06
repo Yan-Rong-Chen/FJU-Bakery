@@ -9,7 +9,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 export default function PlaceOrder({navigation, route}) {
   const authContext = useContext(AuthContext);
-  // console.log(authContext.sighInAcc);
   const [loading, setLoading] = useState(true);
   const [isDataChanged, setIsDataChanged] = useState(false);
   const [accountData, setAccountData] = useState("");
@@ -220,13 +219,30 @@ export default function PlaceOrder({navigation, route}) {
     }
   }
   async function fetchAccountData () {
-    const get_url = url + "Account?view=Grid%20view&filterByFormula=SEARCH(%22yyy@gmail.com%22%2C+acc_email)" /*+ authContext.signInAcc*/;
+    const get_url = url + "Account?view=Grid%20view&filterByFormula=SEARCH(%22"+authContext.signInAcc+"%22%2C+acc_id)";
     try {
         const result = await axios.get(get_url, axios_config);
         setAccountData(result.data.records[0].fields);
         setLoading(false);
     } catch(e) {
         console.log("error: " + e);
+    }
+  }
+
+  async function comfirmOrder(productData) {
+    let update_url = "";
+    let update = "";
+    for (let i in productData) {
+      
+      update_url = url + "Order/"+ productData[i].id;
+      update = {fields: {ord_state: "等待出貨"}}
+    
+      try {
+        const result = await axios.patch(update_url, update, axios_config);
+        console.log("comfirm: " + result.data.fields.ord_state);
+      } catch(e) {
+          console.log("error: " + e);
+      }
     }
   }
 
@@ -347,7 +363,9 @@ export default function PlaceOrder({navigation, route}) {
           <Text style={styles.cartTotal} >總付款金額：${route.params.productTot}</Text>
           <TouchableOpacity 
               style={styles.placeOrderBtn}
-              // onPress={() => navigation.navigate('PlaceOrder')}
+              onPress={() => {
+                comfirmOrder(route.params.productData),
+                navigation.navigate('我的訂單')}}
           >
               <Text style={{color: '#696969'}} >確認</Text>
           </TouchableOpacity>

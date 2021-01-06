@@ -45,6 +45,14 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 16,
     },
+    itemGroup: {
+        height: height * 0.25,
+        width: width * 0.98,
+        borderRadius: 5,
+        marginTop: 5,
+        flexDirection: 'column',
+        backgroundColor: '#FFF',
+    },
     items: {
         height: height * 0.2,
         width: width * 0.98,
