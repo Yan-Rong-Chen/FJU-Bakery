@@ -178,13 +178,9 @@ const tab = () => {
       <Tab.Screen name="menu" component={Menu} options={{title:"菜單"}} />
       <Tab.Screen name="活動" component={ActStack} />          
       {authContext.signInAcc ? (
-        <>
         <Tab.Screen name="cart" component={Cart} options={{title:"購物車"}} />
-        </>
       ) : (
-        <>
         <Tab.Screen name="cart" component={Loginstack} options={{title:"購物車"}} />
-        </>
       )}
     </Tab.Navigator> 
   )
@@ -194,6 +190,8 @@ export default function App() {
   const [products, setProducts] = useState([]);
   const [selectedProdIndex, setSelectedProdIndex] = useState([]);
   const [productFromWhere, setProductFromWhere] = useState([]);
+  const [add, setAdd] = useState(false);
+
   return (      
       <NavigationContainer >
         <ProductContext.Provider 
@@ -203,7 +201,9 @@ export default function App() {
         selectedProdIndex: selectedProdIndex, 
         setSelectedProdIndex: setSelectedProdIndex,
         productFromWhere: productFromWhere,
-        setProductFromWhere: setProductFromWhere
+        setProductFromWhere: setProductFromWhere,
+        add: add,
+        setAdd: setAdd
       }}>
         <Stack.Navigator screenOptions={({navigation}) => ({ headerStyle: { backgroundColor: '#F2B653'},
         headerTitleAlign: 'center', title: 'FJU Bakery',

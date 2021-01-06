@@ -63,6 +63,7 @@ export default function Cart({navigation}) {
   async function fetchCartData () {
     const get_url = url + "Order?view=選購中&filterByFormula=SEARCH(%22"+authContext.signInAcc+"%22%2C+acc_email)";
     try {
+      console.log("fetchCartData")
       const result = await axios.get(get_url, axios_config);
       setCartData(result.data.records);
       setLoading(false);
@@ -75,6 +76,9 @@ export default function Cart({navigation}) {
     } catch(e) {
         console.log("error: " + e);
     }
+    proContext.setAdd(false);
+    console.log("setAdd: false");
+
   }
 
   function validateInputs(num, id) {
@@ -91,7 +95,7 @@ export default function Cart({navigation}) {
 
   useEffect(() => {
     fetchCartData();
-  },[isDataChanged, numOfProd]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchCartData()
+  },[isDataChanged, numOfProd, authContext.signInAcc, proContext.add]); // 當 isDataChanged 或 numOfProd 改變時，執行fetchCartData()
 
   const renderItem = ({ item, index}) => {
     return (
@@ -159,12 +163,13 @@ export default function Cart({navigation}) {
               data={cartData} 
               renderItem = {renderItem}
               keyExtractor={(item, index) => ""+index}
-              onRefresh={()=>{setIsDataChanged(!isDataChanged)}} //pull to refresh --function
+              onRefresh={()=>{setIsDataChanged(!isDataChanged), console.log("refresh")}} //pull to refresh --function
               refreshing={loading} //pull to refresh --boolean
           >
           </FlatList>
         }
         {cartData.length!=0 &&
+          
         <View style={styles.placeOrder}>
           <Text style={styles.cartTotal} >小結：${cartTot}</Text>
           <TouchableOpacity 
@@ -174,6 +179,8 @@ export default function Cart({navigation}) {
               <Text style={{color: '#696969'}} >去結帳</Text>
           </TouchableOpacity>
         </View>
+        
+        
         }
       </View>
     );

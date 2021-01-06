@@ -18,7 +18,7 @@ const MenuStack = createStackNavigator();
 
 function MenuTopTab() {
   return (
-    <TopTab.Navigator
+    <TopTab.Navigator initialRouteName={"全部"}
       tabBarOptions={{
         activeTintColor: '#F2B653',
         inactiveTintColor: 'gray',
@@ -35,13 +35,15 @@ function AllScreen({ navigation }) {
   const get_url = url + "Products?maxRecords=50&view=All";
   const proContext = useContext(ProductContext);
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   
   async function fetchProductsData () {
     try {
         const result = await axios.get(get_url, axios_config);
         proContext.setProducts(result.data.records);
         setLoading(false);
-        // console.log("menu:"+proContext.products[0].fields.pro_name);
+        setData(result.data.records);
+        console.log("menu:"+proContext.products[0].fields.pro_name);
     } catch(e) {
         console.log("error: " + e);
     }
@@ -49,7 +51,7 @@ function AllScreen({ navigation }) {
 
   useEffect(() => {
       fetchProductsData();
-  },[]);
+  },[proContext.add]);
 
   const renderItem = ({ item, index}) => {
     return (
@@ -59,7 +61,7 @@ function AllScreen({ navigation }) {
             proContext.setProductFromWhere(0),
             // console.log("menu:"+proContext.products[0]),
             // console.log(proContext.selectedProdIndex),
-            navigation.navigate('Detail')
+            navigation.navigate('Detail',{selectedP:data[index]})
           }} 
           style={styles.items}>
           <Image style={styles.itemImage} source={{ uri: item.fields.pro_pic[0].url }} />
@@ -151,7 +153,7 @@ function CakeScreen() {
 
 export default function Menu() {
   return (
-      <MenuStack.Navigator>
+      <MenuStack.Navigator initialRouteName="Home">
         <MenuStack.Screen name="Home" component={MenuTopTab} options={{headerShown:false}} />
         <MenuStack.Screen name="Detail" component={productDetail} 
           options={{

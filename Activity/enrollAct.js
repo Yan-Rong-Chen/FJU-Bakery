@@ -224,7 +224,7 @@ export default function enrollAct({navigation,route}) {
     }
   }
   async function fetchAccountData () {
-    const get_url = url + "Account?view=Grid%20view&filterByFormula=SEARCH(%22yyy@gmail.com%22%2C+acc_email)" /*+ authContext.signInAcc*/;
+    const get_url = url + "Account?view=Grid%20view&filterByFormula=SEARCH(%22"+authContext.signInAcc+"%22%2C+acc_id)";
     try {
         const result = await axios.get(get_url, axios_config);
         setAccountData(result.data.records[0].fields);
@@ -273,7 +273,8 @@ export default function enrollAct({navigation,route}) {
     }
 
     return (
-        <View style={styles.container}  >
+        <View style={{flex:1}}  >
+            <ScrollView style={{flex: 1, height: height}} contentContainerStyle={styles.detailContainer}>
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -296,11 +297,11 @@ export default function enrollAct({navigation,route}) {
             </View>
             </Modal>
             <View style={styles.detailText} >
-            <Text>{route.params.act_name.fields.act_name}</Text>
-            <View style={{flexDirection: 'row'}}>
-            <TextInput style={[styles.textInput,]} placeholder='人數' keyboardType="number-pad" value={people} onChangeText={text=> {setPeople(text); setTotal(route.params.act_name.fields.act_price*text)}}/>
-            <Text>總金額：$ {total}</Text>
-            </View>
+              <Text>{route.params.act_name.fields.act_name}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <TextInput style={[styles.textInput,{width:'30%'}]} placeholder='人數' keyboardType="number-pad" value={people} onChangeText={text=> {setPeople(text); setTotal(route.params.act_name.fields.act_price*text)}}/>
+                <Text>總金額：$ {total}</Text>
+              </View>
             <Text>{route.params.act_name.fields.act_date}</Text>
             <View style={[styles.formGroup, styles.formView]}>
                 <Text style={{color: '#696969'}}>請選擇以下活動時段</Text>
@@ -325,7 +326,6 @@ export default function enrollAct({navigation,route}) {
                 );
             })}  
             </View>    
-            <ScrollView style={{flex: 1, height: height}} contentContainerStyle={styles.detailContainer}>
             <View style={styles.formGroup}>
             <TouchableOpacity
                 style={styles.formView}
@@ -401,7 +401,7 @@ export default function enrollAct({navigation,route}) {
                 </Text>
             </TouchableOpacity>
             </View>     
-            </ScrollView>
+            {/* </ScrollView> */}
             
             <Text>{message}</Text>
             <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -411,6 +411,7 @@ export default function enrollAct({navigation,route}) {
               </TouchableOpacity>
             </View>
             </View>
+            </ScrollView>
         </View>        
     );  
 }

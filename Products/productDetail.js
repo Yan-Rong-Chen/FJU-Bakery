@@ -7,20 +7,22 @@ import styles from '../src/styles';
 import {ProductContext} from './productContext';
 import {AuthContext} from '../AuthContext';
 
-export default function productDetail({navigation}) {
+export default function productDetail({navigation, route}) {
+  console.log("detail");
   const proContext = useContext(ProductContext);
   const authContext = useContext(AuthContext);
-  const selectedP = proContext.products[proContext.selectedProdIndex];
-  let pro_name = selectedP.fields.pro_name, 
-    pro_price = selectedP.fields.pro_price, 
-    pro_desc = selectedP.fields.pro_desc;
+  // const selectedP = proContext.products[proContext.selectedProdIndex];
+  
+    let pro_name = route.params.selectedP.fields.pro_name, 
+    pro_price = route.params.selectedP.fields.pro_price, 
+    pro_desc = route.params.selectedP.fields.pro_desc;
   var height = Dimensions.get('window').height;
 
   // productFromWhere 判斷product資料是從哪邊來的，0從menu、1從cart
   if (proContext.productFromWhere == 1) {
-    pro_name = selectedP.fields.pro_name[0];
-    pro_price = selectedP.fields.pro_price[0];
-    pro_desc = selectedP.fields.pro_desc[0];
+    pro_name = route.params.selectedP.fields.pro_name[0];
+    pro_price = route.params.selectedP.fields.pro_price[0];
+    pro_desc = route.params.selectedP.fields.pro_desc[0];
   }
 
   // whichBtn 判斷是按哪個按鈕，0按「加入購物車」、1按「立即購買」
@@ -30,7 +32,8 @@ export default function productDetail({navigation}) {
     if (!authContext.signInAcc) {
       ToastAndroid.show("請先登入", ToastAndroid.LONG);
     } else {
-      if (selectedP.fields.Order || proContext.productFromWhere == 1) {
+      console.log(route.params.selectedP.fields.Order);
+      if (route.params.selectedP.fields.Order || proContext.productFromWhere == 1) {
         console.log("already addToCart");
         if (whichBtn == 0) {
           console.log("whichBtn: " + whichBtn);
@@ -43,8 +46,8 @@ export default function productDetail({navigation}) {
         console.log("not yet addToCart");
         const addToCart_url = url + "Order/";
         const addRecord = {fields: {
-          "ord_cusemail": [ "recBWxZtuBRiO4Jey" ], //到時候改cus id
-          "ord_pname": [ selectedP.id ],
+          "ord_cusemail": [ authContext.signInAcc ], //到時候改cus id
+          "ord_pname": [ route.params.selectedP.id ],
           "ord_number": 1,
           "ord_state": "選購中"
         }};
@@ -53,6 +56,7 @@ export default function productDetail({navigation}) {
           if (whichBtn == 0) {
             console.log("whichBtn: " + whichBtn);
             ToastAndroid.show("已加入購物車 " + result.data.fields.pro_name, ToastAndroid.LONG);
+            proContext.setAdd(true);
           }
         }
         catch (e) {
@@ -68,7 +72,7 @@ export default function productDetail({navigation}) {
       <ScrollView style={{flex: 1, height: height}} contentContainerStyle={styles.detailContainer}>
         <Image 
           style={styles.detailImage} 
-          source={{ uri: selectedP.fields.pro_pic[0].url }} 
+          source={{ uri: route.params.selectedP.fields.pro_pic[0].url }} 
         />
         <View style={styles.detailText} >
           <Text style={styles.itemTitle}>{pro_name}</Text>
